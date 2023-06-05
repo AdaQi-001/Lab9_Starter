@@ -87,6 +87,13 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "fe9f63c47af44b938ca042d25aba93a4"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -102,6 +109,99 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+    errorBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const btnText = btn.textContent;
+        switch (btnText) {
+          case 'Console Log':
+            console.log('Console Log');
+            break;
+          case 'Console Error':
+            console.error('Console Error');
+            break;
+          case 'Console Count':
+            console.count('Console Count');
+            break;
+          case 'Console Warn':
+            console.warn('Console Warn');
+            break;
+          case 'Console Assert':
+            console.assert(false, 'This is an assertion failure');
+            break;
+          case 'Console Clear':
+            console.clear();
+            break;
+          case 'Console Dir':
+            console.dir(document);
+            break;
+          case 'Console dirxml':
+            console.dirxml(document);
+            break;
+          case 'Console Group Start':
+            console.group('Console Group Start');
+            break;
+          case 'Console Group End':
+            console.groupEnd();
+            break;
+          case 'Console Table':
+            console.table([{ name: 'John', age: 30 }, { name: 'Jane', age: 25 }]);
+            break;
+          case 'Start Timer':
+            console.time('Timer');
+            break;
+          case 'End Timer':
+            console.timeEnd('Timer');
+            break;
+          case 'Console Trace':
+            console.trace();
+            break;
+          case 'Trigger a Global Error':
+            throw new Error('This is a global error');
+            break;
+          default:
+            break;
+        }
+      });
+    });
+    function calculate(firstNum, operator, secondNum) {
+      try {
+        validateNumericInput(firstNum);
+        validateNumericInput(secondNum);
+        return eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (e) {
+        console.error(e);
+        return null;
+      }
+    }
+
+    function validateNumericInput(input) {
+      if (isNaN(input)) {
+        throw new ValidationError(`Invalid input: ${input}`);
+      }
+    }
+
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = 'ValidationError';
+      }
+    }
+
+    window.addEventListener('error', e => {
+      console.warn(`Global Error Handler: ${e.message}`);
+    });
+
+    let aform = document.querySelector('form');
+    aform.addEventListener('submit', e => {
+      e.preventDefault();
+      let output = document.querySelector('output');
+      let firstNum = document.querySelector('#first-num').value;
+      let secondNum = document.querySelector('#second-num').value;
+      let operator = document.querySelector('#operator').value;
+      
+      let result = calculate(firstNum, operator, secondNum);
+      output.innerHTML = result !== null ? result : 'Error occurred during calculation';
+    });
   </script>
 </body>
 
